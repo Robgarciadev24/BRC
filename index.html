@@ -60,27 +60,9 @@
     .sub {
       font-size: 15px;
       color: #666;
-      margin-bottom: 40px;
+      margin-bottom: 44px;
       line-height: 1.5;
     }
-
-    /* Spinner shown on load while we try to open the app */
-    .spinner-wrap { margin-bottom: 40px; }
-    .spinner {
-      width: 36px;
-      height: 36px;
-      border: 2.5px solid #222;
-      border-top-color: #fff;
-      border-radius: 50%;
-      animation: spin 0.75s linear infinite;
-      margin: 0 auto 12px;
-    }
-    @keyframes spin { to { transform: rotate(360deg); } }
-    .spinner-label { font-size: 13px; color: #555; }
-
-    /* Button revealed after the load attempt */
-    .actions { display: none; }
-    .actions.visible { display: block; }
 
     .btn {
       display: block;
@@ -97,6 +79,14 @@
     }
     .btn:active { transform: scale(0.97); opacity: 0.9; }
 
+    .download {
+      margin-top: 20px;
+      font-size: 13px;
+      color: #777;
+      text-decoration: none;
+    }
+    .download span { color: #fff; text-decoration: underline; text-underline-offset: 3px; }
+
     .footer {
       position: fixed;
       bottom: 26px;
@@ -112,56 +102,22 @@
   <h1>Brickell Run Club</h1>
   <p class="sub">Every Tuesday · 7 PM · Brickell<br>3.5 miles · All paces · Always free</p>
 
-  <div class="spinner-wrap" id="spinnerWrap">
-    <div class="spinner"></div>
-    <p class="spinner-label">Opening Heylo…</p>
-  </div>
+  <a class="btn" href="https://heylo.group/brickell-run-club" target="_blank" rel="noopener">
+    Join Brickell Run Club →
+  </a>
 
-  <div class="actions" id="actions">
-    <a class="btn" href="https://heylo.group/brickell-run-club" target="_blank" rel="noopener">
-      Join Brickell Run Club →
-    </a>
-  </div>
+  <a class="download" id="storeLink" href="https://apps.apple.com/us/app/heylo-build-community-groups/id1445966180" target="_blank" rel="noopener">
+    Don't have the app? <span>Download Heylo</span>
+  </a>
 
   <p class="footer">#WeRunMiami</p>
 
   <script>
-    const IOS_APP_STORE  = 'https://apps.apple.com/us/app/heylo-build-community-groups/id1445966180';
-    const ANDROID_STORE  = 'https://play.google.com/store/apps/details?id=com.piccup';
-    const DEEP_LINK_IOS  = 'heylo://group/brickell-run-club';
-    const INTENT_ANDROID = 'intent://group/brickell-run-club#Intent;scheme=heylo;package=com.piccup;S.browser_fallback_url=' + encodeURIComponent(ANDROID_STORE) + ';end';
-
-    const ua        = navigator.userAgent;
-    const isIOS     = /iPhone|iPad|iPod/i.test(ua);
-    const isAndroid = /Android/i.test(ua);
-
-    const spinnerWrap = document.getElementById('spinnerWrap');
-    const actions     = document.getElementById('actions');
-
-    function showButton() {
-      spinnerWrap.style.display = 'none';
-      actions.classList.add('visible');
+    // No redirects, no timers — this only swaps the download link for Android.
+    if (/Android/i.test(navigator.userAgent)) {
+      document.getElementById('storeLink').href =
+        'https://play.google.com/store/apps/details?id=com.piccup';
     }
-
-    function run() {
-      if (isIOS) {
-        // Try to open the app. If it's not installed, the scheme fails and we
-        // send them to the App Store. If it IS installed, the app opens and
-        // this page goes to the background (so the store redirect is cancelled).
-        window.location.href = DEEP_LINK_IOS;
-        setTimeout(() => { if (!document.hidden) window.location.href = IOS_APP_STORE; }, 800);
-        setTimeout(showButton, 2200);
-      } else if (isAndroid) {
-        // Android intent opens the app if installed, else the Play Store.
-        window.location.href = INTENT_ANDROID;
-        setTimeout(showButton, 2200);
-      } else {
-        // Desktop — just show the button.
-        showButton();
-      }
-    }
-
-    setTimeout(run, 500);
   <\/script>
 </body>
 </html>
