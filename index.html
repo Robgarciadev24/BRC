@@ -64,10 +64,17 @@
       line-height: 1.5;
     }
 
+    .actions {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      width: 100%;
+      max-width: 320px;
+    }
+
     .btn {
       display: block;
       width: 100%;
-      max-width: 320px;
       padding: 18px 24px;
       border-radius: 16px;
       font-size: 16px;
@@ -78,14 +85,6 @@
       transition: transform 0.15s, opacity 0.15s;
     }
     .btn:active { transform: scale(0.97); opacity: 0.9; }
-
-    .download {
-      margin-top: 20px;
-      font-size: 13px;
-      color: #777;
-      text-decoration: none;
-    }
-    .download span { color: #fff; text-decoration: underline; text-underline-offset: 3px; }
 
     .footer {
       position: fixed;
@@ -102,18 +101,19 @@
   <h1>Brickell Run Club</h1>
   <p class="sub">Every Tuesday · 7 PM · Brickell<br>3.5 miles · All paces · Always free</p>
 
-  <a class="btn" href="https://heylo.group/brickell-run-club" target="_blank" rel="noopener">
-    Join Brickell Run Club →
-  </a>
-
-  <a class="download" id="storeLink" href="https://apps.apple.com/us/app/heylo-build-community-groups/id1445966180" target="_blank" rel="noopener">
-    Don't have the app? <span>Download Heylo</span>
-  </a>
+  <div class="actions">
+    <a class="btn" id="storeLink" href="https://apps.apple.com/us/app/heylo-build-community-groups/id1445966180" target="_blank" rel="noopener">
+      1. Download Heylo
+    </a>
+    <a class="btn" href="https://www.heylo.com/g/17efe88e-c443-4a13-a381-bdd4a5285317" target="_blank" rel="noopener">
+      2. Join Brickell Run Club
+    </a>
+  </div>
 
   <p class="footer">#WeRunMiami</p>
 
   <script>
-    // No redirects, no timers — this only swaps the download link for Android.
+    // No redirects, no timers — only swaps the download link for Android.
     if (/Android/i.test(navigator.userAgent)) {
       document.getElementById('storeLink').href =
         'https://play.google.com/store/apps/details?id=com.piccup';
