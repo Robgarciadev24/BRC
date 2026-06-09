@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Brickell Run Club</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap');
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Inter', -apple-system, sans-serif;
+      background: #080808;
+      color: #fff;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 32px 24px;
+      overflow: hidden;
+    }
+
+    /* Ambient glow */
+    body::before {
+      content: '';
+      position: fixed;
+      top: -120px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 480px;
+      height: 480px;
+      background: radial-gradient(circle, rgba(255,255,255,0.06) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .badge {
+      display: inline-block;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: #888;
+      margin-bottom: 28px;
+      border: 1px solid #222;
+      padding: 6px 14px;
+      border-radius: 100px;
+    }
+
+    .icon {
+      font-size: 52px;
+      margin-bottom: 20px;
+      display: block;
+      animation: bounce 1.8s ease-in-out infinite;
+    }
+
+    @keyframes bounce {
+      0%, 100% { transform: translateY(0); }
+      50%       { transform: translateY(-6px); }
+    }
+
+    h1 {
+      font-size: 36px;
+      font-weight: 900;
+      letter-spacing: -1px;
+      line-height: 1.1;
+      margin-bottom: 10px;
+    }
+
+    .sub {
+      font-size: 15px;
+      color: #666;
+      margin-bottom: 40px;
+      line-height: 1.5;
+    }
+
+    /* Spinner */
+    .spinner-wrap { margin-bottom: 36px; }
+    .spinner {
+      width: 36px;
+      height: 36px;
+      border: 2.5px solid #222;
+      border-top-color: #fff;
+      border-radius: 50%;
+      animation: spin 0.75s linear infinite;
+      margin: 0 auto 12px;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    .spinner-label {
+      font-size: 13px;
+      color: #555;
+    }
+
+    /* Buttons (shown if auto-redirect doesn't fire) */
+    .actions { display: none; flex-direction: column; gap: 12px; width: 100%; max-width: 300px; }
+    .actions.visible { display: flex; }
+
+    .btn {
+      display: block;
+      width: 100%;
+      padding: 15px 20px;
+      border-radius: 14px;
+      font-size: 15px;
+      font-weight: 600;
+      text-decoration: none;
+      cursor: pointer;
+      border: none;
+      transition: opacity 0.15s, transform 0.15s;
+    }
+    .btn:active { transform: scale(0.97); opacity: 0.85; }
+
+    .btn-primary { background: #fff; color: #080808; }
+    .btn-secondary { background: #141414; color: #fff; border: 1px solid #222; }
+
+    .footer {
+      position: fixed;
+      bottom: 24px;
+      font-size: 12px;
+      color: #333;
+    }
+  </style>
+</head>
+<body>
+
+  <span class="badge">Powered by Nike · Baptist Health</span>
+  <span class="icon">🏃</span>
+  <h1>Brickell Run Club</h1>
+  <p class="sub">Every Tuesday · 7 PM · Brickell<br>3.5 miles · All paces · Always free</p>
+
+  <div class="spinner-wrap" id="spinnerWrap">
+    <div class="spinner"></div>
+    <p class="spinner-label" id="spinnerLabel">Opening Heylo…</p>
+  </div>
+
+  <div class="actions" id="actions">
+    <a class="btn btn-primary" id="openAppBtn" href="#">Open in Heylo App</a>
+    <a class="btn btn-secondary" href="https://heylo.group/brickell-run-club" target="_blank">Open in Browser</a>
+  </div>
+
+  <p class="footer">#WeRunMiami</p>
+
+  <script>
+    const IOS_APP_STORE   = 'https://apps.apple.com/us/app/heylo-build-community-groups/id1445966180';
+    const ANDROID_STORE   = 'https://play.google.com/store/apps/details?id=com.piccup';
+    const WEB_URL         = 'https://heylo.group/brickell-run-club';
+    const DEEP_LINK_IOS   = 'heylo://group/brickell-run-club';
+    const INTENT_ANDROID  = `intent://group/brickell-run-club#Intent;scheme=heylo;package=com.piccup;S.browser_fallback_url=${encodeURIComponent(ANDROID_STORE)};end`;
+
+    const ua        = navigator.userAgent;
+    const isIOS     = /iPhone|iPad|iPod/i.test(ua);
+    const isAndroid = /Android/i.test(ua);
+
+    const spinnerLabel = document.getElementById('spinnerLabel');
+    const spinnerWrap  = document.getElementById('spinnerWrap');
+    const actions      = document.getElementById('actions');
+    const openAppBtn   = document.getElementById('openAppBtn');
+
+    function showFallback() {
+      spinnerWrap.style.display = 'none';
+      actions.classList.add('visible');
+    }
+
+    function redirect() {
+      if (isIOS) {
+        openAppBtn.href = DEEP_LINK_IOS;
+        window.location.href = DEEP_LINK_IOS;
+        // If the scheme fails (app not installed), fall back to App Store
+        setTimeout(() => {
+          if (!document.hidden) window.location.href = IOS_APP_STORE;
+        }, 700);
+        // If nothing happened after 2s, show manual buttons
+        setTimeout(showFallback, 2000);
+
+      } else if (isAndroid) {
+        openAppBtn.href = INTENT_ANDROID;
+        window.location.href = INTENT_ANDROID;
+        setTimeout(showFallback, 2000);
+
+      } else {
+        // Desktop — just go to web version
+        spinnerLabel.textContent = 'Redirecting…';
+        setTimeout(() => { window.location.href = WEB_URL; }, 800);
+      }
+    }
+
+    // Slight delay so the page renders before redirecting
+    setTimeout(redirect, 600);
+  </script>
+</body>
+</html>
