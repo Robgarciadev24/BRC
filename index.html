@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Join Brickell Run Club</title>
+  <title>Join a Run Club</title>
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap');
 
@@ -17,9 +17,7 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      justify-content: center;
-      text-align: center;
-      padding: 40px 28px;
+      padding: 48px 28px 64px;
     }
 
     body::before {
@@ -41,83 +39,145 @@
       letter-spacing: 0.15em;
       text-transform: uppercase;
       color: #888;
-      margin-bottom: 30px;
+      margin-bottom: 26px;
       border: 1px solid #222;
       padding: 6px 14px;
       border-radius: 100px;
     }
 
-    .icon { font-size: 60px; margin-bottom: 22px; display: block; }
+    .icon { font-size: 54px; margin-bottom: 18px; display: block; }
 
     h1 {
-      font-size: 38px;
+      font-size: 34px;
       font-weight: 900;
       letter-spacing: -1px;
       line-height: 1.1;
-      margin-bottom: 12px;
+      margin-bottom: 10px;
+      text-align: center;
     }
 
     .sub {
       font-size: 15px;
       color: #666;
-      margin-bottom: 44px;
+      margin-bottom: 40px;
       line-height: 1.5;
+      text-align: center;
     }
 
-    .actions {
-      display: flex;
-      flex-direction: column;
-      gap: 14px;
-      width: 100%;
-      max-width: 320px;
+    .container { width: 100%; max-width: 340px; }
+
+    .step-label {
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: #888;
+      margin: 0 4px 12px;
     }
 
     .btn {
       display: block;
       width: 100%;
-      padding: 18px 24px;
+      padding: 18px 22px;
       border-radius: 16px;
       font-size: 16px;
       font-weight: 700;
       text-decoration: none;
-      background: #fff;
-      color: #080808;
-      transition: transform 0.15s, opacity 0.15s;
+      text-align: center;
+      transition: transform 0.15s, opacity 0.15s, background 0.15s;
     }
     .btn:active { transform: scale(0.97); opacity: 0.9; }
 
+    .btn-primary { background: #fff; color: #080808; }
+
+    .btn-outline {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #111;
+      color: #fff;
+      border: 1px solid #2a2a2a;
+      text-align: left;
+      margin-bottom: 12px;
+    }
+    .btn-outline:hover { background: #181818; }
+    .btn-outline .arrow { color: #777; font-weight: 400; }
+
+    .divider { height: 28px; }
+
     .footer {
-      position: fixed;
-      bottom: 26px;
+      margin-top: 40px;
       font-size: 12px;
       color: #333;
+      text-align: center;
     }
   </style>
 </head>
 <body>
 
-  <span class="badge">Powered by Nike · Baptist Health</span>
+  <span class="badge">Powered by Baptist Health</span>
   <span class="icon">🏃</span>
-  <h1>Brickell Run Club</h1>
-  <p class="sub">Every Tuesday · 7 PM · Brickell<br>3.5 miles · All paces · Always free</p>
+  <h1>Run With Us</h1>
+  <p class="sub">Get the Heylo app, then pick your club 👇</p>
 
-  <div class="actions">
-    <a class="btn" id="storeLink" href="https://apps.apple.com/us/app/heylo-build-community-groups/id1445966180" target="_blank" rel="noopener">
-      1. Download Heylo
+  <div class="container">
+
+    <!-- STEP 1 -->
+    <p class="step-label">1. Download the app</p>
+    <a class="btn btn-primary" id="storeLink"
+       href="https://apps.apple.com/us/app/heylo-build-community-groups/id1445966180"
+       target="_blank" rel="noopener">
+      Download Heylo
     </a>
-    <a class="btn" href="https://www.heylo.com/g/17efe88e-c443-4a13-a381-bdd4a5285317" target="_blank" rel="noopener">
-      2. Join Brickell Run Club
-    </a>
+
+    <div class="divider"></div>
+
+    <!-- STEP 2 -->
+    <p class="step-label">2. Pick your run club</p>
+    <div id="clubs"></div>
+
   </div>
 
   <p class="footer">#WeRunMiami</p>
 
   <script>
-    // No redirects, no timers — only swaps the download link for Android.
+    /* =====================================================================
+       EDIT HERE — paste each club's link between the quotes.
+       To add/remove a club, just add or delete a line.
+       Tip: the direct  https://www.heylo.com/g/...  links open the app best.
+       ===================================================================== */
+    const RUN_CLUBS = [
+      { name: "Brickell",       url: "https://heylo.group/brickell-run-club" },
+      { name: "Coral Gables",   url: "https://heylo.group/baptist-health-gables-run-club" },
+      { name: "Doral",          url: "https://heylo.group/baptist-health-doral-run-club" },
+      { name: "Homestead",      url: "https://heylo.group/baptist-health-homestead-run-club" },
+      { name: "Kendall",        url: "https://heylo.group/baptist-health-kendall-run-club" },
+      { name: "Miami Lakes",    url: "https://heylo.group/baptist-health-miami-lakes-run-club" },
+      { name: "Pembroke Pines", url: "https://heylo.group/baptist-health-pembroke-pines-run-club-powered-by-" },
+      { name: "South Beach",    url: "https://heylo.group/baptist-health-south-beach-run-club-powered-by-nik" },
+      { name: "Sunrise",        url: "https://heylo.group/baptist-health-sunrise-run-club" },
+      { name: "West Kendall",   url: "https://heylo.group/west-kendall-baptist-health-run-club" },
+      { name: "Weston",         url: "https://heylo.group/baptist-health-weston-run-club" },
+    ];
+    /* ===================== stop editing below ===================== */
+
+    // Build the club buttons.
+    const wrap = document.getElementById('clubs');
+    RUN_CLUBS.forEach(function (club) {
+      const a = document.createElement('a');
+      a.className = 'btn btn-outline';
+      a.href = club.url;
+      a.target = '_blank';
+      a.rel = 'noopener';
+      a.innerHTML = '<span>' + club.name + '</span><span class="arrow">&rarr;</span>';
+      wrap.appendChild(a);
+    });
+
+    // Swap the download link to the Play Store on Android.
     if (/Android/i.test(navigator.userAgent)) {
       document.getElementById('storeLink').href =
         'https://play.google.com/store/apps/details?id=com.piccup';
     }
-  <\/script>
+  </script>
 </body>
 </html>
